@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Bay-Delta DNA Detective!</title>
+  
+  <!-- Google Fonts for premium rounded kids friendly look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Outfit:wght@300..900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background decorative water bubbles -->
+  <div class="water-bg">
+    <div class="bubble bubble-1"></div>
+    <div class="bubble bubble-2"></div>
+    <div class="bubble bubble-3"></div>
+    <div class="bubble bubble-4"></div>
+  </div>
+
+  <div class="app-container">
+    
+    <!-- Header Section -->
+    <header class="app-header">
+      <div class="header-left">
+        <h1 class="game-title">DNA Detective 🧬🔍</h1>
+        <p class="game-subtitle">Bay-Delta Fish Edition</p>
+      </div>
+      
+      <div class="header-right">
+        <button id="btn-how-to" class="header-btn secondary-btn" aria-label="How to play instructions">How to Play? 📖</button>
+        <button id="btn-restart" class="header-btn primary-btn" aria-label="Restart the game">New Game 🔄</button>
+      </div>
+    </header>
+
+    <!-- Kid-friendly Mascot Info Box -->
+    <section class="info-banner" id="info-banner">
+      <div class="mascot-avatar">🔬</div>
+      <div class="banner-text">
+        <span class="step-badge">Step 1</span>
+        <h3 id="instruction-text">Drag the fish DNA tracks left or right to align them! Look for matching color columns.</h3>
+      </div>
+    </section>
+
+    <!-- Main Game Board Container -->
+    <main class="game-board-card">
+      <div class="board-header">
+        <div class="col-header-label">Fish Species</div>
+        <div class="col-header-seq">DNA Sequence Alignment (Match the bases!)</div>
+        <div class="col-header-status">Status</div>
+      </div>
+      
+      <div class="alignment-grid-container">
+        <!-- Vertical grid lines in background to help align -->
+        <div class="grid-lines-bg" id="grid-lines-bg">
+          <div class="conserved-glow conserved-glow-left" id="glow-left"></div>
+          <div class="conserved-glow conserved-glow-right" id="glow-right"></div>
+        </div>
+
+        <div class="rows-container" id="rows-container">
+          <!-- Known species rows will be dynamically populated in JS for ease of maintenance, 
+               but styled consistently. We'll outline them here in comments and generate in JS -->
+        </div>
+
+        <div class="divider-line"></div>
+
+        <!-- Mystery Fish Section -->
+        <div class="mystery-section">
+          <div class="mystery-row-container" id="mystery-row-container">
+            <!-- Mystery Fish Row will be generated here -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Multiple Choice Identification Panel (Appears when Mystery DNA is aligned) -->
+    <section class="identity-panel hidden" id="identity-panel">
+      <h2>🎉 DNA MATCH FOUND! 🎉</h2>
+      <p>The Mystery Fish DNA matches one of the species above! Who do you think it is?</p>
+      <div class="species-choices" id="species-choices">
+        <!-- Options generated dynamically -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- How to Play Modal -->
+  <div class="modal-backdrop hidden" id="modal-how-to">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="btn-close-how-to" aria-label="Close modal">&times;</button>
+      <h2>How to Play 🧬</h2>
+      
+      <div class="tutorial-steps">
+        <div class="tut-step">
+          <div class="tut-num">1</div>
+          <p><strong>Align the Known Fish:</strong> Drag each fish's DNA strip left or right. The ends of the DNA should align vertically. When they do, the status light turns <strong>GREEN!</strong></p>
+        </div>
+        <div class="tut-step">
+          <div class="tut-num">2</div>
+          <p><strong>Look at the Colors:</strong> DNA has 4 bases:
+            <span class="base-badge base-A">A</span>,
+            <span class="base-badge base-T">T</span>,
+            <span class="base-badge base-C">C</span>, and
+            <span class="base-badge base-G">G</span>.
+            Try to align matching colors in the same columns!
+          </p>
+        </div>
+        <div class="tut-step">
+          <div class="tut-num">3</div>
+          <p><strong>Find the Mystery Fish:</strong> Drag the purple <strong>Mystery Fish</strong> DNA. Move it until it matches one of the fish perfectly. Look for matching vertical letters!</p>
+        </div>
+        <div class="tut-step">
+          <div class="tut-num">4</div>
+          <p><strong>Solve the Case:</strong> Once the Mystery DNA matches 100%, guess the fish species and read amazing fun facts about it!</p>
+        </div>
+      </div>
+
+      <button id="btn-start-game" class="header-btn primary-btn large-btn">Let's Play! 🚀</button>
+    </div>
+  </div>
+
+  <!-- Success / Win Modal -->
+  <div class="modal-backdrop hidden" id="modal-success">
+    <div class="success-card">
+      <canvas id="confetti-canvas"></canvas>
+      <div class="success-header">
+        <span class="badge-icon">🏆</span>
+        <h2>Case Solved!</h2>
+        <p>You identified the Mystery Fish!</p>
+      </div>
+
+      <div class="winner-reveal">
+        <div class="winner-image-container">
+          <img id="winner-img" src="" alt="Identified Fish">
+        </div>
+        <div class="winner-details">
+          <h3 id="winner-name">Delta Smelt</h3>
+          <h4 id="winner-scientific">Hypomesus transpacificus</h4>
+          
+          <div class="facts-list">
+            <h4>Fun Fish Facts:</h4>
+            <ul id="winner-facts">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btn-play-again" class="header-btn primary-btn large-btn">Play Again! 🔄</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
